@@ -9,6 +9,7 @@
 using namespace std;
 int main(int argc, char* argv[])
 {
+    int ret = 0;
     string device = "/dev/video11";
     /* 打开设备 */
     int fd = open("/dev/video11",O_RDWR);
@@ -24,8 +25,9 @@ int main(int argc, char* argv[])
     int i = 0;
     while(1){
         v4fmt.index = i++;
-        int ret = ioctl(fd,VIDIOC_ENUM_FMT,&v4fmt);
+        ret = ioctl(fd,VIDIOC_ENUM_FMT,&v4fmt);
         if(ret < 0){
+            cout << "获取失败" << endl;
             break;
         }
 
@@ -38,6 +40,18 @@ int main(int argc, char* argv[])
     }
 
     /* 3. 设置采集格式 */
+    struct v4l2_format vfmt;
+    vfmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE; //摄像头采集
+    vfmt.fmt.pix.width = 1920; //设置采集宽度
+    vfmt.fmt.pix.height = 1080; //设置采集高度
+    vfmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV; //设置采集格式
+    vfmt.fmt.pix.field = V4L2_FIELD_ANY; //设置采集场
+    ret = ioctl(fd,VIDIOC_S_FMT,&vfmt);
+    if(ret < 0){
+        cout << "设置采集格式失败" << endl;
+        return -1;
+    }
+    cout << "设置采集格式成功" << endl;
     /* 最后一步:关闭设备 */
     close(fd);
     return 0;
