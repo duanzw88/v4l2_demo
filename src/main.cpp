@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#incldue <sys/ioctl.h>
 #include <linux/videodev2.h>
 
 using namespace std;
