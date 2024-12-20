@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     vfmt.fmt.pix.width = 3840; //设置采集宽度
     vfmt.fmt.pix.height = 2160; //设置采集高度
     vfmt.fmt.pix.pixelformat = V4L2_PIX_FMT_NV12M; //设置采集格式
-    vfmt.fmt.pix.field = V4L2_FIELD_ANY; //设置采集场
+    // vfmt.fmt.pix.field = V4L2_FIELD_ANY; //设置采集场
     ret = ioctl(fd,VIDIOC_S_FMT,&vfmt);
     if(ret < 0){
         cout << "设置采集格式失败" << endl;
