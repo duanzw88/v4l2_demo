@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     }
     cout << "申请缓冲区成功" << endl;
     
-    /* 5. 把内核的缓冲区队列映射到用户空间 */
+    /* 5.把内核的缓冲区队列映射到用户空间 */
     unsigned char *buffer[reqbuffer.count];
     unsigned int size[reqbuffer.count];
     struct v4l2_buffer mapbuffer;
@@ -80,7 +80,28 @@ int main(int argc, char* argv[])
             cout << "映射缓冲区失败" << endl;
             return -1;
         }
+        buffer[i] = (unsigned char *)mmap(NULL,mapbuffer.length,PROT_READ|PROT_WRITE,MAP_SHARED,fd,mapbuffer.m.offset);
+        if(buffer[i] == MAP_FAILED){
+            cout << "映射缓冲区失败" << endl;
+            return -1;
+        }
+        size[i] = mapbuffer.length;
+
+        /* 使用完毕 放回去*/
+        ret = ioctl(fd,VIDIOC_QBUF,&mapbuffer);
+        if(ret < 0){
+            cout << "放回缓冲区失败" << endl;
+            return -1;
+        }
     }
+
+    /* 6. 开始采集 */
+    ret = ioctl(fd,VIDIOC_STREAMON,&vfmt.type);
+    if(ret < 0){
+        cout << "开始采集失败" << endl;
+        return -1;
+    }
+    cout << "开始采集成功" << endl;
     /* 最后一步:关闭设备 */
     close(fd);
     return 0;
