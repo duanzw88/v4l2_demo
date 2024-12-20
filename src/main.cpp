@@ -115,8 +115,8 @@ int main(int argc, char* argv[])
     }
     cout << "提取数据成功" << endl;
 
-    FILE *fp = fopen("test.jpg","wb");
-    fwrite(buffer[readbuffer.index],readbuffer.length,size[readbuffer.index],fp);
+    FILE *fp = fopen("test.jpg","w+");
+    fwrite(buffer[readbuffer.index],readbuffer.length,1,fp);
     fclose(fp);
 
     /* 通知内核使用完毕*/
