@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     int ret = 0;
-    string device = "/dev/video0";
+    const char* device = "/dev/video0";
     /* 打开设备 */
     int fd = open(device,O_RDWR);
     if(fd < 0){
