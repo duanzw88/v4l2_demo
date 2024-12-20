@@ -52,6 +52,19 @@ int main(int argc, char* argv[])
         return -1;
     }
     cout << "设置采集格式成功" << endl;
+    
+    /* 4. 申请内核空间 */
+    struct v4l2_requestbuffers reqbuffer;
+    reqbuffer.count = 4; //申请4个缓冲区
+    reqbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE; //设置缓冲区类型
+    reqbuffer.memory = V4L2_MEMORY_MMAP; //设置缓冲区内存类型
+    ret = ioctl(fd,VIDIOC_REQBUFS,&reqbuffer);
+    if(ret < 0){
+        cout << "申请缓冲区失败" << endl;
+        return -1;
+    }
+    cout << "申请缓冲区成功" << endl;
+
     /* 最后一步:关闭设备 */
     close(fd);
     return 0;
