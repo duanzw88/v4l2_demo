@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 
     FILE *fp = fopen("test.jpg","wb");
     fwrite(buffer[readbuffer.index],readbuffer.length,size[readbuffer.index],fp);
-    close(fp);
+    fclose(fp);
 
     /* 通知内核使用完毕*/
     ret = ioctl(fd,VIDIOC_QBUF,&readbuffer);
