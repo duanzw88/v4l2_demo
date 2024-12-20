@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <linux/videodev2.h>
+#include <sys/mman.h>
+#include <string.h>
 
 using namespace std;
 int main(int argc, char* argv[])
@@ -64,7 +66,21 @@ int main(int argc, char* argv[])
         return -1;
     }
     cout << "申请缓冲区成功" << endl;
-
+    
+    /* 5. 把内核的缓冲区队列映射到用户空间 */
+    unsigned char *buffer[reqbuffer.count];
+    unsigned int size[reqbuffer.count];
+    struct v4l2_buffer mapbuffer;
+    //初始化type index
+    mapbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    for(int i = 0; i < reqbuffer.count; i++){
+        mapbuffer.index = i;
+        ret = ioctl(fd,VIDIOC_QUERYBUF,&mapbuffer); //从内核空间中查询一个空间做映射
+        if(ret < 0){
+            cout << "映射缓冲区失败" << endl;
+            return -1;
+        }
+    }
     /* 最后一步:关闭设备 */
     close(fd);
     return 0;
