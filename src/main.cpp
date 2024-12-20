@@ -27,16 +27,16 @@ int main(int argc, char* argv[])
         v4fmt.index = i++;
         ret = ioctl(fd,VIDIOC_ENUM_FMT,&v4fmt);
         if(ret < 0){
-            cout << "获取失败" << endl;
+            cout << "read format Finished!" << endl;
             break;
         }
 
-        cout << "index = " << v4fmt.index;
-        cout << "flags = " << v4fmt.flags;
-        cout << "desc = " << v4fmt.description;
+        cout << "index = " << v4fmt.index << endl;
+        cout << "flags = " << v4fmt.flags << endl;
+        cout << "desc = " << v4fmt.description << endl;
         unsigned char *p = (unsigned char *)&v4fmt.pixelformat;
-        cout << "pixelformat = " << p[0] << p[1] << p[2] << p[3];
-        cout << "reserved = " << v4fmt.reserved[0];
+        cout << "pixelformat = " << p[0] << p[1] << p[2] << p[3] << endl;
+        cout << "reserved = " << v4fmt.reserved[0] << endl;
     }
 
     /* 3. 设置采集格式 */
