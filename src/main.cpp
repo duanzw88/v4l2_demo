@@ -101,8 +101,45 @@ int main(int argc, char* argv[])
         cout << "开始采集失败" << endl;
         return -1;
     }
-    
     cout << "开始采集成功" << endl;
+
+    /* 7. 采集数据 */
+    /* 从队列中提取一帧数据 */
+    struct v4l2_buffer readbuffer;
+    readbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    readbuffer.memory = V4L2_MEMORY_MMAP;
+    ret = ioctl(fd,VIDIOC_DQBUF,&readbuffer);
+    if(ret < 0){
+        cout << "提取数据失败" << endl;
+        return -1;
+    }
+    cout << "提取数据成功" << endl;
+
+    FILE *fp = fopen("test.jpg","wb");
+    fwrite(buffer[readbuffer.index],readbuffer.length,size[readbuffer.index],fp);
+    close(fp);
+
+    /* 通知内核使用完毕*/
+    ret = ioctl(fd,VIDIOC_QBUF,&readbuffer);
+    if(ret < 0){
+        cout << "通知内核使用完毕失败" << endl;
+        return -1;
+    }
+    cout << "通知内核使用完毕成功" << endl;
+
+    /* 8. 停止采集 */
+    ret = ioctl(fd,VIDIOC_STREAMOFF,&vfmt.type);
+    if(ret < 0){
+        cout << "停止采集失败" << endl;
+        return -1;
+    }
+    cout << "停止采集成功" << endl;
+
+    /* 9. 释放内核空间 */
+    for(int i = 0; i < reqbuffer.count; i++){
+        munmap(buffer[i],size[i]);
+    }
+
     /* 最后一步:关闭设备 */
     close(fd);
     return 0;
