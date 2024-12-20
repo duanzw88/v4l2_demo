@@ -36,6 +36,8 @@ int main(int argc, char* argv[])
         cout << "pixelformat = " << p[0] << p[1] << p[2] << p[3];
         cout << "reserved = " << v4fmt.reserved[0];
     }
+
+    /* 3. 设置采集格式 */
     /* 最后一步:关闭设备 */
     close(fd);
     return 0;
