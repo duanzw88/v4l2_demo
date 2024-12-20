@@ -101,6 +101,7 @@ int main(int argc, char* argv[])
         cout << "开始采集失败" << endl;
         return -1;
     }
+    
     cout << "开始采集成功" << endl;
     /* 最后一步:关闭设备 */
     close(fd);
