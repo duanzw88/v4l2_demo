@@ -10,9 +10,9 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     int ret = 0;
-    string device = "/dev/video11";
+    string device = "/dev/video0";
     /* 打开设备 */
-    int fd = open("/dev/video11",O_RDWR);
+    int fd = open(device,O_RDWR);
     if(fd < 0){
         cout << "打开设备失败" << endl;
         return -1;
