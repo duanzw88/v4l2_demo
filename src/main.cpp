@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     struct v4l2_fmtdesc v4fmt;
     v4fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     int i = 0;
-    while(true){
+    while(1){
         v4fmt.index = i++;
         int ret = ioctl(fd,VIDIOC_ENUM_FMT,&v4fmt);
         if(ret < 0){
